@@ -888,7 +888,7 @@ class _RenderProgressBar extends RenderBox {
 
     // current time label
     final labelDy = (isLabelBelow) ? barHeight + _timeLabelPadding : 0.0;
-    final leftLabelOffset = Offset(0, labelDy);
+    final leftLabelOffset = Offset(10, labelDy);
     _leftTimeLabel().paint(canvas, leftLabelOffset);
 
     // total or remaining time label
