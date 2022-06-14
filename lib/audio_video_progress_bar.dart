@@ -893,19 +893,14 @@ class _RenderProgressBar extends RenderBox {
 
     // total or remaining time label
     final rightLabelDx = size.width - _rightLabelSize.width;
-    final rightLabelOffset = Offset(rightLabelDx, labelDy);
+    final rightLabelOffset = Offset((rightLabelDx + 10), labelDy);
     _rightTimeLabel().paint(canvas, rightLabelOffset);
 
-    // progress bar
     final barDy =
         (isLabelBelow) ? 0.0 : _leftLabelSize.height + _timeLabelPadding;
     _drawProgressBar(canvas, Offset(0, barDy), Size(barWidth, barHeight));
   }
 
-  ///  Draw the progress bar and labels horizontally aligned:
-  ///
-  ///  | 01:23 -------O---------------- 05:00 |
-  ///
   void _drawProgressBarWithLabelsOnSides(Canvas canvas) {
     // left time label
     final leftLabelSize = _leftLabelSize;
