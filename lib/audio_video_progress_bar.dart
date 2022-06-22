@@ -93,6 +93,7 @@ class ProgressBar extends LeafRenderObjectWidget {
     this.thumbGlowRadius = 30.0,
     this.thumbCanPaintOutsideBar = true,
     this.timeLabelLocation,
+    this.hideRightLabel,
     this.timeLabelType,
     this.timeLabelTextStyle,
     this.timeLabelPadding = 0.0,
@@ -102,6 +103,8 @@ class ProgressBar extends LeafRenderObjectWidget {
   ///
   /// This should not be greater than the [total] time.
   final Duration progress;
+
+  final bool? hideRightLabel;
 
   /// The total duration of the media.
   final Duration total;
@@ -259,6 +262,7 @@ class ProgressBar extends LeafRenderObjectWidget {
     final textStyle = timeLabelTextStyle ?? theme.textTheme.bodyText1;
     return _RenderProgressBar(
       progress: progress,
+      hideRightLabel: hideRightLabel ?? false,
       total: total,
       buffered: buffered ?? Duration.zero,
       onSeek: onSeek,
@@ -395,6 +399,7 @@ class _RenderProgressBar extends RenderBox {
     required Color progressBarColor,
     required Color bufferedBarColor,
     required BarCapShape barCapShape,
+    required this.hideRightLabel,
     double thumbRadius = 20.0,
     required Color thumbColor,
     required Color thumbGlowColor,
@@ -432,7 +437,7 @@ class _RenderProgressBar extends RenderBox {
       ..onCancel = _finishDrag;
     _thumbValue = _proportionOfTotal(_progress);
   }
-
+  final bool hideRightLabel;
   // This is the gesture recognizer used to move the thumb.
   HorizontalDragGestureRecognizer? _drag;
 
@@ -857,7 +862,7 @@ class _RenderProgressBar extends RenderBox {
     switch (_timeLabelLocation) {
       case TimeLabelLocation.above:
       case TimeLabelLocation.below:
-        _drawProgressBarWithLabelsAboveOrBelow(canvas);
+        _drawProgressBarWithLabelsAboveOrBelow(canvas, hideRightLabel);
         break;
       case TimeLabelLocation.sides:
         _drawProgressBarWithLabelsOnSides(canvas);
@@ -878,7 +883,7 @@ class _RenderProgressBar extends RenderBox {
   ///
   ///  | 01:23              05:00 |
   ///  | -------O---------------- |
-  void _drawProgressBarWithLabelsAboveOrBelow(Canvas canvas) {
+  void _drawProgressBarWithLabelsAboveOrBelow(Canvas canvas, bool rightlabel) {
     // calculate sizes
     final barWidth = size.width;
     final barHeight = _heightWhenNoLabels();
@@ -894,7 +899,9 @@ class _RenderProgressBar extends RenderBox {
     // total or remaining time label
     final rightLabelDx = size.width - _rightLabelSize.width;
     final rightLabelOffset = Offset((rightLabelDx - 10), labelDy);
-    _rightTimeLabel().paint(canvas, rightLabelOffset);
+    if (rightlabel != true) {
+      _rightTimeLabel().paint(canvas, rightLabelOffset);
+    }
 
     // progress bar
     final barDy =
